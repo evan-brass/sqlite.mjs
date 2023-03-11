@@ -1,0 +1,10 @@
+[build]
+target = "wasm32-unknown-unknown"
+
+[profile.dev]
+panic = "abort"
+opt-level = 2
+
+[profile.release]
+panic = "abort"
+opt-level = "s"

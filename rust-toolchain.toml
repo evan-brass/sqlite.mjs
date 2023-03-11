@@ -1,0 +1,4 @@
+[toolchain]
+channel = "nightly"
+toolchains = ["wasm32-unknown-unknown"]
+profile = "minimal"
