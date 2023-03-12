@@ -3,7 +3,21 @@ name = "sqlite-mjs"
 version = "0.0.1"
 edition = "2021"
 
+[package.metadata.wasm-pack.profile.dev]
+wasm-opt = ["--asyncify"]
+swarf-debug-info = true
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Os", "--asyncify"]
+
+
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
+wasm-bindgen = "0.2.84"
+
+[build-dependencies]
+bindgen = "0.64.0"
+cc = "1.0.79"
+eyre = "0.6.8"

@@ -1,14 +1,25 @@
-pub fn add(left: usize, right: usize) -> usize {
-	left + right
-}
+use std::mem::size_of;
+use wasm_bindgen::prelude::*;
 
-#[cfg(test)]
-mod tests {
-	use super::*;
+#[allow(unused)]
+#[allow(non_snake_case)]
+#[allow(non_camel_case_types)]
+mod sqlite;
+pub use sqlite::*;
 
-	#[test]
-	fn it_works() {
-		let result = add(2, 2);
-		assert_eq!(result, 4);
+mod vfs;
+
+#[wasm_bindgen]
+pub fn test_open(pathname: String) -> *mut sqlite3 {
+	let mut ret = std::ptr::null_mut();
+	let res = unsafe { sqlite3_open(pathname.as_ptr() as *const i8, &mut ret) };
+
+	if res != 0 {
+		if ret != std::ptr::null_mut() {
+			unsafe { sqlite3_close(ret); }
+		}
+		panic!("")
 	}
+
+	ret
 }
