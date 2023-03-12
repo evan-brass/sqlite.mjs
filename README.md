@@ -9,6 +9,3 @@ Like sql.js except:
 * wasm-opt
 * wasi-sdk-19.0 (Download from https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-19 and extract here)
 * Rust `wasm32-unknown-unknown` target (Should be installed when you first run build if you don't have it already)
-
-## Build
-`wasm-pack build --target web --no-typescript`

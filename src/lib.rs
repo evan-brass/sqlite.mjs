@@ -1,4 +1,4 @@
-use std::mem::size_of;
+#![feature(local_key_cell_methods, box_into_inner)]
 use wasm_bindgen::prelude::*;
 
 #[allow(unused)]
@@ -8,6 +8,9 @@ mod sqlite;
 pub use sqlite::*;
 
 mod vfs;
+mod asyncify;
+
+
 
 #[wasm_bindgen]
 pub fn test_open(pathname: String) -> *mut sqlite3 {

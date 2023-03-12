@@ -1,5 +1,8 @@
 use wasm_bindgen::prelude::*;
 use std::mem::size_of;
+use std::any::Any;
+
+use crate::asyncify::co_await_dyn;
 
 use super::sqlite::*;
 
@@ -10,6 +13,11 @@ extern "C" {
 
 	#[wasm_bindgen(js_name = now, js_namespace = Date)]
 	fn now() -> f64;
+}
+
+#[wasm_bindgen(raw_module = "./util.mjs")]
+extern "C" {
+	fn set_timeout(milliseconds: i32) -> js_sys::Promise;
 }
 
 #[repr(C)]
@@ -37,7 +45,11 @@ extern "C" fn randomness(_vfs: *mut sqlite3_vfs, buf_len: i32, buf: *mut i8) -> 
 	buf_len
 }
 extern "C" fn sleep(_vfs: *mut sqlite3_vfs, microseconds: i32) -> i32 {
-	todo!()
+	co_await_dyn(Box::new(async move {
+		wasm_bindgen_futures::JsFuture::from(set_timeout(microseconds / 1000)).await.unwrap();
+		Box::new(()) as Box<dyn Any>
+	}));
+	0
 }
 extern "C" fn current_time(_vfs: *mut sqlite3_vfs, out: *mut i64) -> i32 {
 	unsafe { *out = now() as i64 + 210866760000000; }
